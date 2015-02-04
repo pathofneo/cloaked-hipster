@@ -1,12 +1,29 @@
 #include <iostream>
+#include <map>
+#include <algorithm>
+
 using namespace std;
-#define map_int_int map<int,int>
-#define map_int_int_int map<int,map<int,int> >
+
+class Object
+{
+
+public:
+	int ID;
+	int ObjType;
+	Object();
+	Object(int x,int y);
+	
+};
+
+/*
 typedef struct _object
 {
 	int ID;
 	int ObjType ;
 }Object;
+*/
+typedef map<int,int> map_int_int ;
+typedef map<int,map<int,int> > map_int_int_int; 
 
 class Tower
 {
