@@ -15,35 +15,7 @@ bool TowerAOI::isInRect(Position &pos,Position &start, Position &end)
 	return ((pos.X >= start.X) && (pos.X <= end.X) && (pos.Y >= start.Y) && (pos.Y <= end.Y));
 }
 
-map_int_int_int TowerAOI::GetIdsByRange(Position pos, int r, int* types, int length)
-{
-	Position start;
-	Position end;
-	map_int_int_int result;
-	if (!checkPos(pos) || (r < 0) || (r > rangeLimit)) 
-	{
-		return result;
-	}
 
-	Position p = transPos(pos);
-/*	if (p == NULL) 
-	{
-		cout<<"p value is nil.\n"
-	}*/
-	//Position* pt = 
-	getPosLimit(p, r, max,&start,&end);
-	//Position start = *pt; 
-	//Position end = *(pt+1);
-	
-	for (int i = start.X; i <= end.X; i++) 
-	{
-		for (int j = start.Y; j <= end.Y; j++) 
-		{
-			result = addMapByTypes(result, towers[i][j].GetIdsByTypes(types,length), types,length);
-		}
-	}
-	return result;
-}
 
 void TowerAOI::getPosLimit(Position pos, int r , Position max, Position* start , Position* end)// (start *Position, end *Position)//返回一个数组指针
 {
@@ -86,34 +58,6 @@ void TowerAOI::getPosLimit(Position pos, int r , Position max, Position* start ,
 	
 }
 
-/*map_int_int_l TowerAOI::GetIdsByPos(Position pos, int r )
-{
-	map_int_int_l result;
-	Position start,end,p;
-	
-	result.length=0;
-	if (checkPos(pos) || (r < 0)) 
-	{
-		return result;
-	}
-
-	if (r > 5) 
-	{
-		r = 5;
-	}
-
-	p = transPos(pos);
-	getPosLimit(p, r, max,&start,&end);
-	for (int i = start.X; i <= end.X; i++) 
-	{
-		for (int j = start.Y; j <= end.Y; j++) 
-		{
-			addMap(result, towers[i][j].GetIds(),&result);
-		}
-	}
-	return result;
-}
-*/
 bool TowerAOI::checkPos(Position pos )
 {
 	
@@ -157,17 +101,7 @@ Position TowerAOI::transPos(Position pos)
 	return p;
 }
 
-map_int_int_int TowerAOI::GetWatchers(Position pos, int* types,int length)
-{
-	map_int_int_int result;
-	Position p;
-	
-	if (checkPos(pos)) {
-		p = transPos(pos);
-		return towers[p.X][p.Y].GetWatchers(types,length);
-	}
-	return result;
-}
+
 
 void TowerAOI::AddWatcher(Object watcher, Position pos, int r )
 {
@@ -221,20 +155,7 @@ void TowerAOI::addMap(vector<int> * result, map_int_int m)//,vector<int> * resul
         result->push_back(it->second);
 }
 
-map_int_int_int TowerAOI::addMapByTypes( map_int_int_int result, map_int_int_int m , int* types, int length)
-{
-	int objType;
-	map_int_int::iterator it;
-	for (int i = 0; i < length; i++) 
-	{
-		objType = types[i];
-		
-		
-		for(it=m[objType].begin();it!=m[objType].end();++it)
-        result[objType].insert(pair<int,int>(it->first ,it->second));
-	}
-	return result;
-}
+
 bool TowerAOI::UpdateObject(Object obj, Position oldPos, Position newPos)
 {
 	Tower oldTower,newTower;
@@ -399,10 +320,10 @@ bool TowerAOI::UpdateWatcher(Object watcher, Position oldPos, Position newPos , 
 		//	addMap(&addObjs, ids);
 		//} */
 		
-		cout<<"addOBJ:";
-		for (int i = 0; i < addObjs.size(); i++)
-			cout<<" id=  "<<addObjs[i];
-		cout<<endl;
+	cout<<"addOBJ:";
+	for (int i = 0; i < addObjs.size(); i++)
+		cout<<" id=  "<<addObjs[i];
+	cout<<endl;
 		
 
 	/* 	for (int i = 0; i < removeTowers.size(); i++) 
@@ -412,15 +333,15 @@ bool TowerAOI::UpdateWatcher(Object watcher, Position oldPos, Position newPos , 
 			addMap(&removeObjs, ids);
 			
 		} */
-		cout<<"removeObj:";
-		for (int i = 0; i < removeObjs.size(); i++)
-			cout<<" id=  "<<removeObjs[i];
-		cout<<endl;	
+	cout<<"removeObj:";
+	for (int i = 0; i < removeObjs.size(); i++)
+		cout<<" id=  "<<removeObjs[i];
+	cout<<endl;	
 
-		cout<<"unchangedObjs:";
-		for (int i = 0; i < unchangedObjs.size(); i++)
-			cout<<" id=  "<<unchangedObjs[i];
-		cout<<endl;				
+	cout<<"unchangedObjs:";
+	for (int i = 0; i < unchangedObjs.size(); i++)
+		cout<<" id=  "<<unchangedObjs[i];
+	cout<<endl;				
 		
 		
 		
@@ -435,60 +356,6 @@ bool TowerAOI::UpdateWatcher(Object watcher, Position oldPos, Position newPos , 
 	}
 	return false;
 }
-
-void TowerAOI::getChangedTowers(Position p1, Position p2, int oldRange , int newRange , map_int_int_Tower towers , Position max, 
-vector_Tower_s * removeTowers,vector_Tower_s * addTowers,vector_Tower_s * unChangeTowers)
-{
-	Position start1, end1;
-	getPosLimit(p1, oldRange, max,&start1, &end1 );
-	Position start2, end2;
-	getPosLimit(p2, newRange, max,&start2, &end2);
-	Position p;
-
-	
-	
-	for (int x = start1.X; x <= end1.X; x++) 
-	{
-		for (int y = start1.Y; y <= end1.Y; y++) 
-		{
-			p.X=x;
-			p.Y=y;
-			if (isInRect(p, start2, end2)) 
-			{
-				//if unChangeTowers == nil {
-				//	unChangeTowers = make([]*Tower, 1)
-				//}
-				//cout<<"uc  "<<x<<" "<<y<<endl;
-				unChangeTowers->push_back(&towers[x][y]);
-			} 
-			else 
-			{
-				//if removeTowers == nil {
-				//	removeTowers = make([]*Tower, 1)
-				//}
-				//cout<<"rm  "<<x<<" "<<y<<endl;
-				removeTowers->push_back(&towers[x][y]);
-			}
-		}
-	}
-
-	for (int x = start2.X; x <= end2.X; x++) {
-		for (int y = start2.Y; y <= end2.Y; y++) {
-			p.X=x;
-			p.Y=y;
-			if (!isInRect(p, start1, end1)) {
-				//if addTowers == nil {
-				//	addTowers = make([]*Tower, 1)
-				//}
-				//cout<<"add  "<<x<<" "<<y<<endl;
-				addTowers->push_back(&towers[x][y]);
-			}
-		}
-	}
-	return;
-}
-
-
 TowerAOI::TowerAOI(MapConfig a,TowerConfig b) 
 {
 	//t.Config = config
