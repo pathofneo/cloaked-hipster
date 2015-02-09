@@ -257,16 +257,14 @@ bool TowerAOI::UpdateObject(Object obj, Position oldPos, Position newPos)
 
 	oldTower = towers[p1.X][p1.Y];
 	newTower = towers[p2.X][p2.Y];
-
-	oldTower.Remove(&obj);
-	newTower.Add(&obj);
-	
-	
-	
-	
+		
 	printTower(oldTower,"oldTower");
 	printTower(newTower,"newTower");
 	
+	towers[p1.X][p1.Y].Remove(&obj);
+	towers[p2.X][p2.Y].Add(&obj);
+
+
 		// this.emit('update', {id: obj.id, type:obj.type, oldWatchers:oldTower.watchers, newWatchers:newTower.watchers})
 	return true;
 }
@@ -281,7 +279,7 @@ bool TowerAOI::UpdateWatcher(Object watcher, Position oldPos, Position newPos , 
 	}
 			
  		vector_int addObjs;// := make([]int64, 1)
-		vector_int removeObjs;// := make([]int64, 1)
+		vector_int removeObjs,unchangedObjs;// := make([]int64, 1)
 
 	Position p1 = transPos(oldPos);
 	Position p2 = transPos(newPos);
@@ -336,7 +334,10 @@ bool TowerAOI::UpdateWatcher(Object watcher, Position oldPos, Position newPos , 
 				//	unChangeTowers = make([]*Tower, 1)
 				//}
 				//cout<<"uc  "<<x<<" "<<y<<endl;
-				unChangeTowers.push_back(&towers[x][y]);
+				//unChangeTowers.push_back(&towers[x][y]);
+				ids = towers[x][y].GetIds();
+				addMap(&unchangedObjs, ids);
+				
 			} 
 			else 
 			{
@@ -344,7 +345,11 @@ bool TowerAOI::UpdateWatcher(Object watcher, Position oldPos, Position newPos , 
 				//	removeTowers = make([]*Tower, 1)
 				//}
 				//cout<<"rm  "<<x<<" "<<y<<endl;
-				removeTowers.push_back(&towers[x][y]);
+				//removeTowers.push_back(&towers[x][y]);
+				towers[x][y].RemoveWatcher(&watcher);
+				ids = towers[x][y].GetIds();
+				addMap(&removeObjs, ids);
+				
 			}
 		}
 	}
@@ -369,7 +374,7 @@ bool TowerAOI::UpdateWatcher(Object watcher, Position oldPos, Position newPos , 
 	}
 		
 
-		
+	/* 	
 		// for (int i = 0; i < addTowers.size(); i++) 
 		// {
 			// addTowers[i]->AddWatcher(&watcher);
@@ -392,7 +397,7 @@ bool TowerAOI::UpdateWatcher(Object watcher, Position oldPos, Position newPos , 
 		//	addTowers[i].AddWatcher(&watcher);
 		//	ids = addTowers[i].GetIds();
 		//	addMap(&addObjs, ids);
-		//}
+		//} */
 		
 		cout<<"addOBJ:";
 		for (int i = 0; i < addObjs.size(); i++)
@@ -400,25 +405,32 @@ bool TowerAOI::UpdateWatcher(Object watcher, Position oldPos, Position newPos , 
 		cout<<endl;
 		
 
-		for (int i = 0; i < removeTowers.size(); i++) 
+	/* 	for (int i = 0; i < removeTowers.size(); i++) 
 		{
 			removeTowers[i]->RemoveWatcher(&watcher);
 			ids = removeTowers[i]->GetIds();
 			addMap(&removeObjs, ids);
 			
-		}
+		} */
 		cout<<"removeObj:";
 		for (int i = 0; i < removeObjs.size(); i++)
 			cout<<" id=  "<<removeObjs[i];
-		cout<<endl;		
+		cout<<endl;	
+
+		cout<<"unchangedObjs:";
+		for (int i = 0; i < unchangedObjs.size(); i++)
+			cout<<" id=  "<<unchangedObjs[i];
+		cout<<endl;				
 		
-	/*	 */
+		
+		
+	/*	 
 		
 		//printf...
 		
 		//Println("unChangeTowers: %v ?????", unChangeTowers)
 
-		//this.emit('updateWatcher', {id: watcher.id, type:watcher.type, addObjs: addObjs, removeObjs:removeObjs});
+		//this.emit('updateWatcher', {id: watcher.id, type:watcher.type, addObjs: addObjs, removeObjs:removeObjs});*/
 		return true;
 	}
 	return false;

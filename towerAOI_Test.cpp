@@ -29,7 +29,7 @@ int main()
 	pos3=Position(44,22);
 	t.AddObject(obj3, pos3);
 	
-/* 
+ 
 	pos4=Position(62,32);
 	t.UpdateObject(obj3, pos3, pos4);
 	cout<<endl;
@@ -41,7 +41,7 @@ int main()
 	
 	pos6=Position(42,72);
 	t.UpdateObject(obj3, pos5, pos6);
-	cout<<endl; */
+	cout<<endl; 
 	
 	pos7=Position(62,72);
 	t.UpdateObject(obj2, pos2, pos7);
