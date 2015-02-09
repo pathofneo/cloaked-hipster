@@ -1,5 +1,6 @@
 #include <iostream>
 #include <map>
+
 #include <algorithm>
 
 using namespace std;
@@ -34,20 +35,40 @@ private:
 	int		size;
 
 public:
+	//map_int_int_int	watchers;	//watchers.objtype.id=id
+	
 	//Init();
 	bool Add(Object* obj );
 	void Remove(Object* obj );
 	map_int_int GetIds(); 
 	void AddWatcher(Object* watcher);
 	void RemoveWatcher(Object* watcher);
-	//GetWatchers(types []int) map[int]map[int64]int64
-	map_int_int_int GetWatchers(int* types,int length);
+
+	map_int_int_int GetWatchers(int* types,int length);		//GetWatchers(types []int) map[int]map[int64]int64
 	map_int_int_int GetIdsByTypes(int* types,int length);		//GetIdsByTypes(types []int) map[int]map[int64]int64
 //	CreateTower() (Tower* tower );		// CreateTower() (tower *Tower)
 	
 };
 
-
+void printTower(Tower t,string s)
+{
+	int a[10];
+	a[0]=1;
+	map_int_int_int watchers =t.GetWatchers(a,1);
+	map_int_int m=watchers[1]; //watcherByType1
+	map_int_int::iterator it;
+	
+	cout<<s;
+	cout<<"  watchers: ";
+	
+	for(it=m.begin();it!=m.end();++it)
+	{
+		cout<<"  id:  "<<it->second;
+	
+	}
+	
+	cout<<endl;
+}
 
 /*	
 var Tower = function(){

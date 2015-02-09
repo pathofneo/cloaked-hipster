@@ -1,18 +1,31 @@
 #include "tower.cpp"
+#include <vector>
 #include <math.h>
+using namespace std;
+
 
 typedef struct Rectangle_  {
 	int Width;
 	int Height;
 }Rectangle; 
 
-typedef struct Position_ {
-	int X; 
-	int Y;
-}Position;
+typedef vector<int> vector_int ;
+typedef vector<Tower> vector_Tower ;
+typedef vector<Tower* > vector_Tower_s ;
+
 typedef map<int,map<int,Tower> > map_int_int_Tower; 
 
+
+// typedef struct Position_ {
+	// int X; 
+	// int Y;
+	
+// }Position;
+
+
 //typedef struct map_int_int_length_ {
+	
+	
 //	map_int_int content; 
 //	int length;
 //}map_int_int_l;
@@ -30,6 +43,18 @@ typedef  struct TowerConfig_{
 	int ID;
 }TowerConfig;
 
+
+class Position
+{
+public:
+	int X; 
+	int Y;
+	Position(int a,int b);
+
+	Position();
+
+};
+
 /*
 type TowerConfig struct {
 	*Rectangle
@@ -45,16 +70,20 @@ class TowerAOI
 {
 private:
 	//*Config
-	MapConfig M;
+		MapConfig M;
 	TowerConfig T;
+	int rangeLimit; 
+	
+
 	int width;      
 	int height;     
 	map_int_int_Tower towers;     
-	int rangeLimit; 
+	
 	//*
 	Position max;   
 
 public:
+
 	bool isInRect(Position &pos,Position &start, Position &end);
 	//int[] addMap(int[] result, m map[int][]) 
 	map_int_int_int GetIdsByRange(Position pos, int r, int* types, int length);
@@ -67,16 +96,22 @@ public:
 	map_int_int_int GetWatchers(Position pos, int* types,int length);
 	void AddWatcher(Object watcher, Position pos, int r );
 	void RemoveWatcher(Object watcher, Position pos,  int r) ;
-	void addMap(map_int_int result, map_int_int m,map_int_int * result2 );
+	void addMap(vector<int> * result, map_int_int m);
 	
 	map_int_int_int addMapByTypes( map_int_int_int result, map_int_int_int m , int* types, int length);
 	bool UpdateObject(Object obj, Position oldPos, Position newPos);
 	bool UpdateWatcher(Object watcher, Position oldPos, Position newPos ,  int oldRange,  int newRange);
-	getChangedTowers(p1 *Position, p2 *Position, oldRange int, newRange int, towers [][]*Tower, max *Position) (removeTowers []*Tower, addTowers []*Tower, unChangeTowers []*Tower) 
+	void getChangedTowers(Position p1, Position p2, int oldRange , int newRange , map_int_int_Tower towers , Position max, 
+	vector_Tower_s* removeTowers,vector_Tower_s* addTowers,vector_Tower_s* unChangeTowers);
+	TowerAOI(MapConfig a,TowerConfig b);
+	
+	
 };
 //func isInRect(pos *Position, start *Position, end *Position) bool 
 
 
+
+/*
 
 func (t *TowerAOI) Init(config *Config) 
 //func (t *TowerAOI) GetIdsByRange(pos *Position, r int, types []int) map[int]map[int64]int64
